@@ -1,0 +1,57 @@
+server:
+  port: 9192
+
+
+spring:
+  application:
+    name: bz-infor-integration-service
+  datasource:
+    url: jdbc:sqlserver://${BZ_INFOR_INTEGRATION_SERVICE_DB_HOST}:${BZ_INFOR_INTEGRATION_SERVICE_DB_PORT};database=${BZ_INFOR_INTEGRATION_SERVICE_DB_NAME};encrypt=true;trustServerCertificate=true
+    username: ${BZ_INFOR_INTEGRATION_SERVICE_DB_USER}
+    password: ${BZ_INFOR_INTEGRATION_SERVICE_DB_PASSWORD}
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  rabbitmq:
+    host: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_HOST}
+    port: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_PORT}
+    username: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_USER}
+    password: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_PASSWORD}
+
+logging:
+  level:
+    root: DEBUG
+
+
+application:
+  infor_company: ${BZ_INFOR_INTEGRATION_SERVICE_DB_INFOR_COMPANY}
+  rabbitmq:
+    exchange:
+      measured-remainders_direct: ${RABBIT_EXCHANGE_MEASURED-REMAINDERS_DIRECT}
+      inventory_direct: ${RABBIT_EXCHANGE_INVENTORY_DIRECT}
+      item_direct: ${RABBIT_EXCHANGE_ITEM_DIRECT}
+      lot_direct: ${RABBIT_EXCHANGE_LOT_DIRECT}
+      warehouse_direct: ${RABBIT_EXCHANGE_WAREHOUSE_DIRECT}
+      container_direct: ${RABBIT_EXCHANGE_CONTAINER_DIRECT}
+      barcode_direct: ${RABBIT_EXCHANGE_BARCODE_DIRECT}
+      mechanicalpart_direct: ${RABBIT_EXCHANGE_MECHANICALPART_DIRECT}
+    queue:
+      find_measured-remainders: ${RABBIT_QUEUE_FIND_MEASURED-REMAINDERS}
+      find_stock_list: ${RABBIT_QUEUE_FIND_STOCK_LIST}
+      get_item_detail: ${RABBIT_QUEUE_GET_ITEM_DETAIL}
+      get_lot_detail: ${RABBIT_QUEUE_GET_LOT_DETAILPLACEMENT}
+      get_warehouse_detail: ${RABBIT_QUEUE_GET_WAREHOUSE_DETAIL}
+      get_location_detail: ${RABBIT_QUEUE_GET_LOCATION_DETAIL}
+      get_container: ${RABBIT_QUEUE_GET_CONTAINER}
+      find_containers: ${RABBIT_QUEUE_FIND_CONTAINERS}
+      find_barcode_data: ${RABBIT_QUEUE_FIND_BARCODE_DATA}
+      report_operation: ${RABBIT_QUEUE_REPORT_OPERATION}
+    key:
+      find_measured-remainders: ${RABBIT_KEY_FIND_MEASURED-REMAINDERS}
+      find_stock_list: ${RABBIT_KEY_FIND_STOCK_LIST}
+      get_item_detail: ${RABBIT_KEY_GET_ITEM_DETAIL}
+      get_lot_detail: ${RABBIT_KEY_GET_LOT_DETAIL}
+      get_warehouse_detail: ${RABBIT_KEY_GET_WAREHOUSE_DETAIL}
+      get_location_detail: ${RABBIT_KEY_GET_LOCATION_DETAIL}
+      get_container: ${RABBIT_KEY_GET_CONTAINER}
+      find_containers: ${RABBIT_KEY_FIND_CONTAINERS}
+      find_barcode_data: ${RABBIT_KEY_FIND_BARCODE_DATA}
+      report_operation: ${RABBIT_KEY_REPORT_OPERATION}
