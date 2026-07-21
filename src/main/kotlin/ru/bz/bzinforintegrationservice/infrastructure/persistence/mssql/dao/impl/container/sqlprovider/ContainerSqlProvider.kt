@@ -6,7 +6,7 @@ import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.EntityFi
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.filter.SearchContainerFilterDto
 
 
-private const val COMPANY_PROPERTY = "application.infor_company"
+private const val COMPANY_PROPERTY = "application.mssql.infor_company"
 
 @Component
 class ContainerSqlProvider (

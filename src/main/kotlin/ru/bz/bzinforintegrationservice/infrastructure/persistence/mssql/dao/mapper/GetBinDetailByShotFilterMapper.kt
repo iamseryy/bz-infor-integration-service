@@ -2,8 +2,8 @@ package ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.map
 
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Component
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.BinDto
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.getInstance
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.BinDto
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.getInstance
 import java.sql.ResultSet
 
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="infor-integration-service"/>
+    <property name="LOG_DIR" value="${BZ_INFOR_INTEGRATION_SERVICE_LOG_DIR:-logs}"/>
+
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app_name":"${APP_NAME}"}</customFields>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>messageId</includeMdcKeyName>
+            <includeMdcKeyName>source</includeMdcKeyName>
+            <includeMdcKeyName>status</includeMdcKeyName>
+            <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</timestampPattern>
+        </encoder>
+    </appender>
+
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/application-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>999</maxHistory>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"app_name":"${APP_NAME}"}</customFields>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>messageId</includeMdcKeyName>
+            <includeMdcKeyName>source</includeMdcKeyName>
+            <includeMdcKeyName>status</includeMdcKeyName>
+        </encoder>
+    </appender>
+
+
+    <springProfile name="local, dev, default">
+        <root level="INFO">
+            <appender-ref ref="JSON_CONSOLE"/>
+            <!--дублировать логи в файл локально-->
+             <appender-ref ref="JSON_FILE"/>
+        </root>
+    </springProfile>
+
+
+    <!-- Для продакшена: консоль (для сбора агентом, например, Filebeat) + файл (как резерв) -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="JSON_CONSOLE"/>
+            <appender-ref ref="JSON_FILE"/>
+        </root>
+    </springProfile>
+
+</configuration>

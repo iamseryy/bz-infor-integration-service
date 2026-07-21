@@ -13,7 +13,7 @@ import ru.bz.bzinforintegrationservice.domain.model.lot.LotDetail
 @Component
 class LotDaoImpl(
     private val jdbcTemplate: JdbcTemplate,
-    @Value("\${application.infor_company}") private val company: String
+    @Value("\${application.mssql.infor_company}") private val company: String
 ): LotDao {
     override fun getLotDetail(filter: SearchLotDetailShotFilter): LotDetail? =
         jdbcTemplate.query(buildSqlQuery(filter), LotDao.Companion.lotDetailRowMapper).firstOrNull()?.toLotDetail()

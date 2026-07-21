@@ -4,7 +4,7 @@ import org.springframework.core.env.Environment
 import org.springframework.stereotype.Component
 
 
-private const val COMPANY_PROPERTY = "application.infor_company"
+private const val COMPANY_PROPERTY = "application.mssql.infor_company"
 
 @Component
 class MechanicalpartSqlProvider(

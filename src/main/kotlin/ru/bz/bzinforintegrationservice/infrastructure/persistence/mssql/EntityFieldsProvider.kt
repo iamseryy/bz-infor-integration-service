@@ -41,6 +41,7 @@ object EntityFieldsProvider {
     const val LENGTH = "length"
     const val WIDTH = "width"
     const val DEPTH = "depth"
+    const val THICKNESS = "thickness"
     const val LOT = "lot"
     const val LOT_CODE_ORIGINAL = "lot_code_original"
     const val LOT_CODE_FINAL = "lot_code_final"
@@ -60,4 +61,5 @@ object EntityFieldsProvider {
     const val PAGE_SIZE = "page_size"
     const val DATA = "data"
     const val JSON_DATA = "json_data"
+    const val INVENTORY_DATE = "inventory_date"
 }

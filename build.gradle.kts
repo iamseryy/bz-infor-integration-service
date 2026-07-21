@@ -1,42 +1,67 @@
 plugins {
-    id("org.springframework.boot") version "3.3.0"
-    id("io.spring.dependency-management") version "1.1.5"
-    kotlin("jvm") version "1.9.24"
-    kotlin("plugin.spring") version "1.9.24"
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.git.properties)
 }
 
-group = "com.example"
+group = "ru.bz"
 version = "0.0.1-SNAPSHOT"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(19)
-    }
-}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
-    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.1")
-    implementation("com.microsoft.sqlserver:mssql-jdbc:12.8.1.jre11")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("org.springframework.amqp:spring-rabbit-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // SPRING BOOT STARTERS
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.amqp)
+    implementation(libs.spring.boot.starter.data.jdbc)
+    implementation(libs.spring.boot.starter.actuator)
+
+    // KOTLIN & JACKSON
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.datatype.jsr310)
+
+    // DATABASE
+    implementation(libs.mssql.jdbc)
+
+    // JWT
+    implementation(libs.bundles.jjwt)
+
+    // LOG
+    implementation(libs.kotlin.logging)
+    implementation(libs.logstash.encoder)
+
+    // TEST
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.spring.rabbit.test)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {
+    jvmToolchain(24)
+
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
 
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//}
+tasks.withType<Test> {
+    useJUnitPlatform()
+    failOnNoDiscoveredTests.set(false)
+}
+
+springBoot {
+    buildInfo()
+}
+
+gitProperties {
+    keys = listOf("git.branch", "git.commit.id.abbrev", "git.commit.time")
+    // ISO-8601
+    dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXX"
+    dateFormatTimeZone = "UTC"
+}

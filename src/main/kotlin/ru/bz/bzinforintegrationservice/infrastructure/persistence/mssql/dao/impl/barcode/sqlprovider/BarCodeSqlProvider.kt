@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.EntityFieldsProvider
 
 
-private const val COMPANY_PROPERTY = "application.infor_company"
+private const val COMPANY_PROPERTY = "application.mssql.infor_company"
 
 @Component
 class BarCodeSqlProvider(

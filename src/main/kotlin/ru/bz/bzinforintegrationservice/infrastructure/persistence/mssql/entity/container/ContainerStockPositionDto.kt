@@ -4,8 +4,8 @@ import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.i
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.item.toItem
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.order.WarehouseOrderDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.order.toWarehouseOrder
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.LocationDto
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.toLocation
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.LocationDto
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.toLocation
 import ru.bz.bzinforintegrationservice.domain.model.container.ContainerStockPosition
 
 data class ContainerStockPositionDto(

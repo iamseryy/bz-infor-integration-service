@@ -1,5 +1,6 @@
 package ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.impl.container
 
+import mu.KotlinLogging
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.ContainerDao
@@ -16,6 +17,8 @@ class ContainerDaoImpl (
     private val containerSqlProvider: ContainerSqlProvider,
     private val containerExtractors: ContainerExtractors
 ): ContainerDao {
+    private val logger = KotlinLogging.logger {}
+
     override fun getContainerDetailByCode(code: String): ContainerDto? =
         SearchContainerFilterDto(containerCode = code).let {filter ->
             findContainersDetailByFilter(filter).containers.firstOrNull()
@@ -30,7 +33,8 @@ class ContainerDaoImpl (
                 containers = containers ?: emptyList(),
                 page = filter.page,
                 pageSize = filter.pageSize)
+        }.also {
+            val test = containerSqlProvider.findContainersByFilter(filter)
+            logger.debug { "Executing SQL: $test" }
         }
-
-
 }

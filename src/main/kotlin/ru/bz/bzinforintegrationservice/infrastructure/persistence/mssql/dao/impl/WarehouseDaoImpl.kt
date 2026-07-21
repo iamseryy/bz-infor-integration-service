@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.EntityFieldsProvider
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.WarehouseDao
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.mapper.GetBinDetailByShotFilterMapper
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.toBin
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.toWarehouse
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.toBin
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.toWarehouse
 import ru.bz.bzinforintegrationservice.domain.model.filter.SearchBinDetailShotFilter
 import ru.bz.bzinforintegrationservice.domain.model.warehouse.Bin
 import ru.bz.bzinforintegrationservice.domain.model.warehouse.Warehouse
@@ -17,7 +17,7 @@ import ru.bz.bzinforintegrationservice.domain.model.warehouse.Warehouse
 class WarehouseDaoImpl(
     private val jdbcTemplate: JdbcTemplate,
     private val getBinDetailByShotFilterMapper: GetBinDetailByShotFilterMapper,
-    @Value("\${application.infor_company}") private val company: String
+    @Value("\${application.mssql.infor_company}") private val company: String
 ): WarehouseDao {
     override fun getWarehouseDetail(warehouseCode: String): Warehouse? =
         jdbcTemplate.query(buildSqlQueryGetWarehouseDetail(warehouseCode), WarehouseDao.Companion.warehouseDetailRowMapper).firstOrNull()?.toWarehouse()

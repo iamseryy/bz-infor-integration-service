@@ -6,7 +6,7 @@ import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.EntityFi
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.item.ItemDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.item.UnitDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.order.WarehouseOrderDto
-import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.warehouse.LocationDto
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.LocationDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.container.ContainerDetailStockPositionDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.container.ContainerDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.container.ContainerStockDto

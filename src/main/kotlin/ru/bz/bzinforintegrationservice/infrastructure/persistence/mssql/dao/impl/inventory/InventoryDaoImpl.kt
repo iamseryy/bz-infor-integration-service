@@ -60,7 +60,7 @@ class InventoryDaoImpl(
 
 
     private fun getFullStockTableQuery(): String =
-        environment.getProperty("application.infor_company").let { company ->
+        environment.getProperty("application.mssql.infor_company").let { company ->
             """stock AS (
                             SELECT  whinr140.t_cwar AS ${EntityFieldsProvider.WAREHOUSE_CODE},
                                     whinr140.t_loca AS ${EntityFieldsProvider.BIN_CODE},
@@ -80,7 +80,7 @@ class InventoryDaoImpl(
         }
 
     private fun getLotWithChildrenTableQuery(filter: SearchInventoryBalanceFilter): String =
-        environment.getProperty("application.infor_company").let { company ->
+        environment.getProperty("application.mssql.infor_company").let { company ->
             """party_hierarchy AS (
                         SELECT  whltc100.t_clot AS ${EntityFieldsProvider.LOT_CODE},
                                 whltc100.t_item AS ${EntityFieldsProvider.ITEM_CODE},

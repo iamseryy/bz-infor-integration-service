@@ -1,13 +1,13 @@
 package ru.bz.bzinforintegrationservice.domain.model.container
 
 enum class ContainerStatus (val number: Int, val description: String)  {
-    EMPTY(10, "������"),
-    ON_CONFIG(20, "�� ������������"),
-    CONFIGURED(30, "�������������"),
-    FOR_PLACEMENT(40, "� ����������"),
-    PLACED(50, "��������"),
-    RESERVE(60, "������"),
-    UNDEFINED(0, "�� ������������");
+    EMPTY(10, "Пустой"),
+    ON_CONFIG(20, "На комплектации"),
+    CONFIGURED(30, "Укомплектован"),
+    FOR_PLACEMENT(40, "К размещению"),
+    PLACED(50, "Размещен"),
+    RESERVE(60, "Резерв"),
+    UNDEFINED(0, "Не определено");
 
     companion object {
         fun getByNumber(number: Int): ContainerStatus = entries.firstOrNull{ it.number == number } ?: UNDEFINED

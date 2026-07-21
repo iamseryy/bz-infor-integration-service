@@ -1,34 +1,29 @@
 package ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.measuredremainder
 
-import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.MeasuredRemainder
-import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.MeasuredRemainderStatus
+import ru.bz.bzinforintegrationservice.domain.model.entity.measuredremainder.MeasuredRemainder
+import ru.bz.bzinforintegrationservice.domain.model.entity.measuredremainder.MeasuredRemainderStatus
+import java.time.LocalDateTime
 
 data class MeasuredRemainderDto(
     val id: String,
-    val remainder: String,
+    val code: String,
     val projectCode: String,
     val material: String,
-    val warehouseCode: String,
-    val binCode: String,
-    val sequence: Int,
+    val location: MeasuredRemainderLocationDto,
     val statusCode: Int,
     val comment: String,
-    val length: Double,
-    val width: Double,
-    val depth: Double
+    val dimensions: MeasuredRemainderDimensionsDto,
+    val inventoryDate: LocalDateTime
 )
 
 fun MeasuredRemainderDto.toMeasuredRemainder() = MeasuredRemainder(
     id = id,
-    remainder = remainder,
+    code = code,
     projectCode = projectCode,
     material = material,
-    warehouseCode = warehouseCode,
-    binCode = binCode,
-    sequence = sequence,
-    status = MeasuredRemainderStatus.getByNumber(statusCode),
+    location = location.toMeasuredRemainderLocation(),
+    status = MeasuredRemainderStatus.fromNumberOrDefault(statusCode),
     comment = comment,
-    length = length,
-    width = width,
-    depth = depth
+    dimensions = dimensions.toMeasuredRemainderDimensions(),
+    inventoryDate = inventoryDate
 )

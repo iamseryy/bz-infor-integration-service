@@ -12,7 +12,7 @@ import ru.bz.bzinforintegrationservice.domain.model.Item.Item
 @Component
 class ItemDaoImpl(
     private val jdbcTemplate: JdbcTemplate,
-    @Value("\${application.infor_company}") private val company: String
+    @Value("\${application.mssql.infor_company}") private val company: String
 ): ItemDao {
     override fun getItemDetail(itemCode: String): Item? =
         jdbcTemplate.query(buildSqlQuery(itemCode), ItemDao.Companion.itemRowMapper).firstOrNull()?.toItem()

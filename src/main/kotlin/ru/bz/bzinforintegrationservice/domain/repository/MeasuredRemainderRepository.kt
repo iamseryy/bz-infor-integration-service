@@ -1,8 +1,11 @@
 package ru.bz.bzinforintegrationservice.domain.repository
 
-import ru.bz.bzinforintegrationservice.domain.model.filter.SearchMeasuredRemainderFilter
-import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.MeasuredRemaindersPagination
+import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPage
+import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPageRequest
+import ru.bz.bzinforintegrationservice.domain.model.entity.measuredremainder.MeasuredRemainder
+import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.filter.MeasuredRemainderFilter
 
-fun interface MeasuredRemainderRepository{
-    fun findByFilter(filter: SearchMeasuredRemainderFilter): MeasuredRemaindersPagination
+interface MeasuredRemainderRepository{
+    fun findPage(filter: MeasuredRemainderFilter, pageRequest: DomainPageRequest): DomainPage<MeasuredRemainder>
+    fun update(measuredRemainder: MeasuredRemainder, userLogin: String): Int
 }

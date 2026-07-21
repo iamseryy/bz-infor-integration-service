@@ -1,0 +1,46 @@
+[versions]
+# Third‑party libraries
+jjwt = "0.13.0"
+mssql-jdbc = "13.4.0.jre11"
+kotlin-logging = "3.0.5"
+logstash-encoder = "9.0"
+
+[libraries]
+# Spring Boot Starters (versions not specified — managed by BOM)
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-amqp = { module = "org.springframework.boot:spring-boot-starter-amqp" }
+spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-rabbit-test = { module = "org.springframework.amqp:spring-rabbit-test" }
+
+# Kotlin & Jackson (versions not specified — managed by Spring Boot)
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
+
+# Database
+mssql-jdbc = { module = "com.microsoft.sqlserver:mssql-jdbc", version.ref = "mssql-jdbc" }
+
+# JWT
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+# Log
+kotlin-logging = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+logstash-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logstash-encoder" }
+
+# Test
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+[bundles]
+jjwt = ["jjwt-api", "jjwt-impl", "jjwt-jackson"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version = "4.0.6" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.5" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "2.2.0" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version = "2.2.0" }
+git-properties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.4" }

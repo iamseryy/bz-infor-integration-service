@@ -1,15 +1,20 @@
 server:
-  port: 9192
-
+  port: ${BZ_INFOR_INTEGRATION_SERVICE_PORT}
 
 spring:
   application:
-    name: bz-infor-integration-service
+    name: bz_infor_integration_service
+  profiles:
+    active: ${BZ_INFOR_INTEGRATION_SERVICE_SPRING_PROFILES_ACTIVE}
   datasource:
-    url: jdbc:sqlserver://${BZ_INFOR_INTEGRATION_SERVICE_DB_HOST}:${BZ_INFOR_INTEGRATION_SERVICE_DB_PORT};database=${BZ_INFOR_INTEGRATION_SERVICE_DB_NAME};encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://${BZ_INFOR_INTEGRATION_SERVICE_DB_HOST}:${BZ_INFOR_INTEGRATION_SERVICE_DB_PORT};database=${BZ_INFOR_INTEGRATION_SERVICE_DB_NAME};encrypt=false;trustServerCertificate=true
     username: ${BZ_INFOR_INTEGRATION_SERVICE_DB_USER}
     password: ${BZ_INFOR_INTEGRATION_SERVICE_DB_PASSWORD}
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
   rabbitmq:
     host: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_HOST}
     port: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_PORT}
@@ -17,27 +22,64 @@ spring:
     password: ${BZ_INFOR_INTEGRATION_SERVICE_RABBITMQ_PASSWORD}
 
 logging:
+  config: classpath:logging/logback-spring.xml
   level:
-    root: DEBUG
+    root: INFO
+    ru.bz.bzinforintegrationservice: ${BZ_INFOR_INTEGRATION_SERVICE_LOGGING_LEVEL}
+    org.springframework.amqp: WARN
+    org.springframework.amqp.rabbit.core.RabbitTemplate: WARN
+    org.hibernate.SQL: WARN
+
+# Actuator
+management:
+  server:
+    port: ${BZ_INFOR_INTEGRATION_SERVICE_ACTUATOR_PORT}
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,loggers,metrics"
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+      probes:
+        enabled: true  # For /actuator/health/liveness and /actuator/health/readiness
+  info:
+    env:
+      enabled: true
+  health:
+    db:
+      enabled: true
+    rabbit:
+      enabled: true
+    diskspace:
+      enabled: false
+info:
+  app:
+    description: Integration service with Infor LN
+  environment: ${BZ_INFOR_INTEGRATION_SERVICE_SPRING_PROFILES_ACTIVE:local}
 
 
 application:
-  infor_company: ${BZ_INFOR_INTEGRATION_SERVICE_DB_INFOR_COMPANY}
+  mssql:
+    infor_company: 302
+#    infor_company: ${BZ_INFOR_INTEGRATION_SERVICE_DB_INFOR_COMPANY}
+  token:
+    signing:
+      key: ${BZ_INFOR_INTEGRATION_SERVICE_JWT_KEY}
   rabbitmq:
     exchange:
-      measured-remainders_direct: ${RABBIT_EXCHANGE_MEASURED-REMAINDERS_DIRECT}
-      inventory_direct: ${RABBIT_EXCHANGE_INVENTORY_DIRECT}
-      item_direct: ${RABBIT_EXCHANGE_ITEM_DIRECT}
-      lot_direct: ${RABBIT_EXCHANGE_LOT_DIRECT}
+      measured_remainders_direct: ${RABBIT_EXCHANGE_MEASURED_REMAINDERS_DIRECT}
       warehouse_direct: ${RABBIT_EXCHANGE_WAREHOUSE_DIRECT}
-      container_direct: ${RABBIT_EXCHANGE_CONTAINER_DIRECT}
       barcode_direct: ${RABBIT_EXCHANGE_BARCODE_DIRECT}
       mechanicalpart_direct: ${RABBIT_EXCHANGE_MECHANICALPART_DIRECT}
     queue:
-      find_measured-remainders: ${RABBIT_QUEUE_FIND_MEASURED-REMAINDERS}
+      find_measured_remainders: ${RABBIT_QUEUE_FIND_MEASURED_REMAINDERS}
+      update_measured_remainder: ${RABBIT_QUEUE_UPDATE_MEASURED_REMAINDER}
+      inventory_measured_remainders: ${RABBIT_QUEUE_INVENTORY_MEASURED_REMAINDERS}
       find_stock_list: ${RABBIT_QUEUE_FIND_STOCK_LIST}
       get_item_detail: ${RABBIT_QUEUE_GET_ITEM_DETAIL}
-      get_lot_detail: ${RABBIT_QUEUE_GET_LOT_DETAILPLACEMENT}
+      get_lot_detail: ${RABBIT_QUEUE_GET_LOT_DETAIL}
       get_warehouse_detail: ${RABBIT_QUEUE_GET_WAREHOUSE_DETAIL}
       get_location_detail: ${RABBIT_QUEUE_GET_LOCATION_DETAIL}
       get_container: ${RABBIT_QUEUE_GET_CONTAINER}
@@ -45,7 +87,9 @@ application:
       find_barcode_data: ${RABBIT_QUEUE_FIND_BARCODE_DATA}
       report_operation: ${RABBIT_QUEUE_REPORT_OPERATION}
     key:
-      find_measured-remainders: ${RABBIT_KEY_FIND_MEASURED-REMAINDERS}
+      find_measured_remainders: ${RABBIT_KEY_FIND_MEASURED_REMAINDERS}
+      update_measured_remainder: ${RABBIT_KEY_UPDATE_MEASURED_REMAINDER}
+      inventory_measured_remainders: ${RABBIT_KEY_INVENTORY_MEASURED_REMAINDERS}
       find_stock_list: ${RABBIT_KEY_FIND_STOCK_LIST}
       get_item_detail: ${RABBIT_KEY_GET_ITEM_DETAIL}
       get_lot_detail: ${RABBIT_KEY_GET_LOT_DETAIL}
