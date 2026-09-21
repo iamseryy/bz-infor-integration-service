@@ -78,7 +78,11 @@ class RabbitConfig(
             queues = listOf(
                 props.getQueue(RabbitKeys.FIND_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.FIND_MEASURED_REMAINDERS_KEY),
                 props.getQueue(RabbitKeys.UPDATE_MEASURED_REMAINDER_QUEUE) to props.getKey(RabbitKeys.UPDATE_MEASURED_REMAINDER_KEY),
-                props.getQueue(RabbitKeys.INVENTORY_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.INVENTORY_MEASURED_REMAINDERS_KEY)
+                props.getQueue(RabbitKeys.INVENTORY_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.INVENTORY_MEASURED_REMAINDERS_KEY),
+                props.getQueue(RabbitKeys.FIND_LOCATIONS_OF_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.FIND_LOCATIONS_OF_MEASURED_REMAINDERS_KEY),
+                props.getQueue(RabbitKeys.FIND_MATERIALS_OF_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.FIND_MATERIALS_OF_MEASURED_REMAINDERS_KEY),
+                props.getQueue(RabbitKeys.FIND_PROJECT_CODES_OF_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.FIND_PROJECT_CODES_OF_MEASURED_REMAINDERS_KEY),
+                props.getQueue(RabbitKeys.FIND_WAREHOUSE_CODES_OF_MEASURED_REMAINDERS_QUEUE) to props.getKey(RabbitKeys.FIND_WAREHOUSE_CODES_OF_MEASURED_REMAINDERS_KEY),
             ).filter { it.second.isNotEmpty() }
         )
 

@@ -9,12 +9,9 @@ import ru.bz.bzinforintegrationservice.applications.usecases.measuredremainder.M
 import ru.bz.bzinforintegrationservice.domain.common.Result
 import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.common.abortreason.toAbortReasonDto
 import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.common.page.toDomainPageRequest
+import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.location.toLocationDto
 import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.filter.toMeasuredRemainderFilter
-import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.message.MeasuredRemainderFilterRequestMessage
-import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.message.MeasuredRemainderUpdateResponseMessage
-import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.message.MeasuredRemainderUpdateRequestMessage
-import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.message.MeasuredRemaindersPageResponseMessage
-import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.message.toMeasuredRemaindersPageResponseMessage
+import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.message.*
 import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.toMeasuredRemainder
 import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.dto.measuredremainder.toMeasuredRemainderDto
 import ru.bz.bzinforintegrationservice.infrastructure.messaging.rabbit.interceptor.RabbitMdcInterceptor
@@ -65,6 +62,55 @@ class MeasuredRemainderRabbitListener(
             }
 
 
+    @RabbitListener(queues = ["\${application.rabbitmq.queue.find_locations_of_measured_remainders}"])
+    fun handleSearchLocationsRequest(
+        message: FindLocationsByWarehouseCodeRequestMessage,
+        @Header(RabbitMdcInterceptor.TRACE_ID_HEADER) traceId: String
+    ): Message<LocationsResponseMessage>  =
+        useCases.getLocationsByWarehouseCode(
+            warehouseCode = message.warehouseCode
+        ).let { locations ->
+            LocationsResponseMessage(locations.map { it.toLocationDto() })
+        }.let { responseMessage ->
+                MessageBuilder.withPayload(responseMessage)
+                    .setHeader(RabbitMdcInterceptor.TRACE_ID_HEADER, traceId)
+                    .build()
+            }
+
+    @RabbitListener(queues = ["\${application.rabbitmq.queue.find_materials_of_measured_remainders}"])
+    fun handleSearchMaterialsRequest(
+        message: FindMaterialsRequestMessage,
+        @Header(RabbitMdcInterceptor.TRACE_ID_HEADER) traceId: String
+    ): Message<MaterialsResponseMessage>  =
+        MaterialsResponseMessage(useCases.getMaterials()).let { responseMessage ->
+            MessageBuilder.withPayload(responseMessage)
+                .setHeader(RabbitMdcInterceptor.TRACE_ID_HEADER, traceId)
+                .build()
+        }
+
+
+    @RabbitListener(queues = ["\${application.rabbitmq.queue.find_project_codes_of_measured_remainders}"])
+    fun handleSearchProjectCodesRequest(
+        message: FindProjectCodesRequestMessage,
+        @Header(RabbitMdcInterceptor.TRACE_ID_HEADER) traceId: String
+    ): Message<ProjectCodesResponseMessage>  =
+        ProjectCodesResponseMessage(useCases.getProjectCodes()).let { responseMessage ->
+            MessageBuilder.withPayload(responseMessage)
+                .setHeader(RabbitMdcInterceptor.TRACE_ID_HEADER, traceId)
+                .build()
+        }
+
+
+    @RabbitListener(queues = ["\${application.rabbitmq.queue.find_warehouse_codes_of_measured_remainders}"])
+    fun handleSearchWarehouseCodesRequest(
+        message: FindWarehouseCodesRequestMessage,
+        @Header(RabbitMdcInterceptor.TRACE_ID_HEADER) traceId: String
+    ): Message<WarehouseCodesResponseMessage>  =
+        WarehouseCodesResponseMessage(useCases.getWarehouseCodes()).let { responseMessage ->
+            MessageBuilder.withPayload(responseMessage)
+                .setHeader(RabbitMdcInterceptor.TRACE_ID_HEADER, traceId)
+                .build()
+        }
 
 
 //        {

@@ -4,10 +4,14 @@ import ru.bz.bzinforintegrationservice.domain.model.entity.measuredremainder.Mea
 import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.filter.MeasuredRemainderFilter
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPage
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPageRequest
+import ru.bz.bzinforintegrationservice.domain.model.warehouse.Location
 
 
 interface MeasuredRemainderDao {
     fun findPage(filter: MeasuredRemainderFilter, pageRequest: DomainPageRequest): DomainPage<MeasuredRemainder>
     fun update(measuredRemainder: MeasuredRemainder, userLogin: String): Int
-    fun findBinCodesByWarehouseCode(warehouseCode: String): List<String>
+    fun findLocationsByWarehouseCode(warehouseCode: String?): List<Location>
+    fun findMaterials(): List<String>
+    fun findProjectCodes(): List<String>
+    fun findWarehouseCodes(): List<String>
 }

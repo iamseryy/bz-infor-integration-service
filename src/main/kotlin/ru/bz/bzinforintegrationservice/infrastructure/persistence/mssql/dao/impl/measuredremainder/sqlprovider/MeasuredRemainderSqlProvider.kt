@@ -134,20 +134,78 @@ class MeasuredRemainderSqlProvider (
         return sql to params
     }
 
-    fun buildFindBinCodesByWarehouseCodeQuery(warehouseCode: String): Pair<String, MapSqlParameterSource> {
+    fun buildFindLocationsByWarehouseCodeQuery(warehouseCode: String?): Pair<String, MapSqlParameterSource> {
         val params = MapSqlParameterSource()
 
         val sql = buildString {
             append(
                 """
-                SELECT whwmd300.t_loca AS ${EntityFieldsProvider.BIN_CODE}
+                SELECT  whwmd300.t_loca AS ${EntityFieldsProvider.BIN_CODE},
+                        whwmd300.t_cwar AS ${EntityFieldsProvider.WAREHOUSE_CODE}
                 FROM twhwmd300${props.inforCompany} AS whwmd300
-                WHERE whwmd300.t_cwar = :warehouseCode
+                WHERE whwmd300.t_zone = N'МО'
                 """.trimIndent()
             )
             with(warehouseCode){
-                params.addValue("warehouseCode", warehouseCode)
+                if (!warehouseCode.isNullOrEmpty()) {
+                    append(" AND whwmd300.t_cwar = :warehouseCode")
+                    params.addValue("warehouseCode", warehouseCode)
+                }
             }
+        }
+
+        return sql to params
+    }
+
+
+    fun buildFindMaterialsQuery(): Pair<String, MapSqlParameterSource> {
+        val params = MapSqlParameterSource()
+
+        val sql = buildString {
+            append(
+                """
+                SELECT DISTINCT tcibd001.t_dscb AS ${EntityFieldsProvider.MATERIAL}
+                FROM    twhwmd530${props.inforCompany} AS whwmd530
+                JOIN    ttcibd001${props.inforCompany} AS tcibd001 
+                        ON whwmd530.t_item = tcibd001.t_item
+                WHERE   whwmd530.t_cdf_mern = 1
+                        AND tcibd001.t_dscb <> ''
+                """.trimIndent()
+            )
+        }
+
+        return sql to params
+    }
+
+    fun buildFindProjectCodesQuery(): Pair<String, MapSqlParameterSource> {
+        val params = MapSqlParameterSource()
+
+        val sql = buildString {
+            append(
+                """
+                SELECT DISTINCT whwmd530.t_cdf_cprj AS ${EntityFieldsProvider.PROJECT_CODE}
+                FROM    twhwmd530${props.inforCompany} AS whwmd530
+                WHERE   whwmd530.t_cdf_mern = 1
+                        AND whwmd530.t_cdf_cprj <> ''
+                """.trimIndent()
+            )
+        }
+
+        return sql to params
+    }
+
+    fun buildFindWarehouseCodesQuery(): Pair<String, MapSqlParameterSource> {
+        val params = MapSqlParameterSource()
+
+        val sql = buildString {
+            append(
+                """
+                SELECT DISTINCT whwmd530.t_cwar AS ${EntityFieldsProvider.WAREHOUSE_CODE}
+                FROM    twhwmd530${props.inforCompany} AS whwmd530
+                WHERE   whwmd530.t_cdf_mern = 1
+                        AND whwmd530.t_cwar <> ''
+                """.trimIndent()
+            )
         }
 
         return sql to params

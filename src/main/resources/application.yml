@@ -62,8 +62,7 @@ info:
 
 application:
   mssql:
-    infor_company: 302
-#    infor_company: ${BZ_INFOR_INTEGRATION_SERVICE_DB_INFOR_COMPANY}
+    infor_company: ${BZ_INFOR_INTEGRATION_SERVICE_DB_INFOR_COMPANY}
   token:
     signing:
       key: ${BZ_INFOR_INTEGRATION_SERVICE_JWT_KEY}
@@ -77,6 +76,10 @@ application:
       find_measured_remainders: ${RABBIT_QUEUE_FIND_MEASURED_REMAINDERS}
       update_measured_remainder: ${RABBIT_QUEUE_UPDATE_MEASURED_REMAINDER}
       inventory_measured_remainders: ${RABBIT_QUEUE_INVENTORY_MEASURED_REMAINDERS}
+      find_locations_of_measured_remainders: ${RABBIT_QUEUE_FIND_LOCATIONS_OF_MEASURED_REMAINDERS}
+      find_materials_of_measured_remainders: ${RABBIT_QUEUE_FIND_MATERIALS_OF_MEASURED_REMAINDERS}
+      find_project_codes_of_measured_remainders: ${RABBIT_QUEUE_FIND_PROJECT_CODES_OF_MEASURED_REMAINDERS}
+      find_warehouse_codes_of_measured_remainders: ${RABBIT_QUEUE_FIND_WAREHOUSE_CODES_OF_MEASURED_REMAINDERS}
       find_stock_list: ${RABBIT_QUEUE_FIND_STOCK_LIST}
       get_item_detail: ${RABBIT_QUEUE_GET_ITEM_DETAIL}
       get_lot_detail: ${RABBIT_QUEUE_GET_LOT_DETAIL}
@@ -90,6 +93,10 @@ application:
       find_measured_remainders: ${RABBIT_KEY_FIND_MEASURED_REMAINDERS}
       update_measured_remainder: ${RABBIT_KEY_UPDATE_MEASURED_REMAINDER}
       inventory_measured_remainders: ${RABBIT_KEY_INVENTORY_MEASURED_REMAINDERS}
+      find_locations_of_measured_remainders: ${RABBIT_KEY_FIND_LOCATIONS_OF_MEASURED_REMAINDERS}
+      find_materials_of_measured_remainders: ${RABBIT_KEY_FIND_MATERIALS_OF_MEASURED_REMAINDERS}
+      find_project_codes_of_measured_remainders: ${RABBIT_KEY_FIND_PROJECT_CODES_OF_MEASURED_REMAINDERS}
+      find_warehouse_codes_of_measured_remainders: ${RABBIT_KEY_FIND_WAREHOUSE_CODES_OF_MEASURED_REMAINDERS}
       find_stock_list: ${RABBIT_KEY_FIND_STOCK_LIST}
       get_item_detail: ${RABBIT_KEY_GET_ITEM_DETAIL}
       get_lot_detail: ${RABBIT_KEY_GET_LOT_DETAIL}

@@ -7,6 +7,7 @@ import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.filter.Mea
 import ru.bz.bzinforintegrationservice.domain.repository.MeasuredRemainderRepository
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPage
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPageRequest
+import ru.bz.bzinforintegrationservice.domain.model.warehouse.Location
 
 @Component
 class MeasuredRemainderRepositoryImpl(
@@ -21,4 +22,12 @@ class MeasuredRemainderRepositoryImpl(
         measuredRemainder: MeasuredRemainder,
         userLogin: String
     ): Int = dao.update(measuredRemainder, userLogin)
+
+    override fun findLocationsByWarehouseCode(warehouseCode: String?): List<Location> = dao.findLocationsByWarehouseCode(warehouseCode)
+
+    override fun findMaterials(): List<String> = dao.findMaterials()
+
+    override fun findProjectCodes(): List<String> = dao.findProjectCodes()
+
+    override fun findWarehouseCodes(): List<String> = dao.findWarehouseCodes()
 }

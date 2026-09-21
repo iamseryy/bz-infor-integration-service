@@ -11,10 +11,13 @@ import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPage
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPageRequest
 import ru.bz.bzinforintegrationservice.domain.model.entity.measuredremainder.MeasuredRemainder
 import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.filter.MeasuredRemainderFilter
+import ru.bz.bzinforintegrationservice.domain.model.warehouse.Location
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.EntityFieldsProvider
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.configuration.MssqlProperties
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.MeasuredRemainderDao
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.dao.impl.measuredremainder.sqlprovider.MeasuredRemainderSqlProvider
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.LocationDto
+import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.location.toLocation
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.measuredremainder.MeasuredRemainderDimensionsDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.measuredremainder.MeasuredRemainderDto
 import ru.bz.bzinforintegrationservice.infrastructure.persistence.mssql.entity.measuredremainder.MeasuredRemainderLocationDto
@@ -54,9 +57,13 @@ class MeasuredRemainderDaoImpl(
         )
     }
 
-    private val rowMapperBinCodes = RowMapper<List<String>> { rs: ResultSet, _: Int ->
-        rs.getArray(EntityFieldsProvider.BIN_CODE) as List<String>
+    private val rowMapperLocation = RowMapper<LocationDto> { rs: ResultSet, _: Int ->
+        LocationDto(
+            warehouseCode = rs.getString(EntityFieldsProvider.WAREHOUSE_CODE),
+            binCode = rs.getString(EntityFieldsProvider.BIN_CODE)
+        )
     }
+
 
     override fun findPage(
         filter: MeasuredRemainderFilter,
@@ -89,9 +96,29 @@ class MeasuredRemainderDaoImpl(
         } catch (e: DataAccessException) {
             logger.error(e) { "Database error while searching remainders with filter: $filter" }
             throw e
+        } catch (e: UncategorizedSQLException) {
+            logger.error(e) { "SQL error during searching remainder(s)" }
+            throw e
         }
     }
 
+    override fun findLocationsByWarehouseCode(warehouseCode: String?): List<Location> {
+        val (sql, params) = sqlProvider.buildFindLocationsByWarehouseCodeQuery(warehouseCode)
+        logger.debug { "Executing SQL: $sql" }
+        logger.debug { "With parameters: $params" }
+
+        try {
+            val results = namedParameterJdbcTemplate.query(sql, params, rowMapperLocation)
+            logger.info { "Successfully found ${results.size} location(s)"}
+            return results.map { it.toLocation() }
+        } catch (e: DataAccessException) {
+            logger.error(e) { "Database error while searching location(s) for warehouse: $warehouseCode" }
+            throw e
+        } catch (e: UncategorizedSQLException) {
+            logger.error(e) { "SQL error during find location(s) for warehouse: $warehouseCode" }
+            throw e
+        }
+    }
 
     override fun update(
         measuredRemainder: MeasuredRemainder,
@@ -106,23 +133,76 @@ class MeasuredRemainderDaoImpl(
             val result = namedParameterJdbcTemplate.update(sql, params)
             logger.info { "Successfully updated $result row(s) into twhwmd530${props.inforCompany} with parameter values: ${measuredRemainder}" }
             return result
-        } catch (e: UncategorizedSQLException) {
-            logger.error(e) { "SQL error during insert operation for user: ${userLogin}" }
+        }
+        catch (e: DataAccessException) {
+            logger.error(e) { "Database error while updating remainder: $measuredRemainder" }
+            throw e
+        }
+        catch (e: UncategorizedSQLException) {
+            logger.error(e) { "SQL error during update operation for user: ${userLogin}" }
             throw e
         }
     }
 
-    override fun findBinCodesByWarehouseCode(warehouseCode: String): List<String> {
-        val (sql, params) = sqlProvider.buildFindBinCodesByWarehouseCodeQuery(warehouseCode)
+
+
+
+    override fun findMaterials(): List<String> {
+        val (sql, params) = sqlProvider.buildFindMaterialsQuery()
         logger.debug { "Executing SQL: $sql" }
         logger.debug { "With parameters: $params" }
 
         try {
-            val result = namedParameterJdbcTemplate.query(sql, params, rowMapperBinCodes)
-            logger.info { "Successfully updated $result row(s) into twhwmd530${props.inforCompany} with parameter values: ${warehouseCode}" }
-            return result.
-        } catch (e: UncategorizedSQLException) {
-            logger.error(e) { "SQL error during insert operation for user: ${userLogin}" }
+            val result = namedParameterJdbcTemplate.queryForList(sql, params, String::class.java).filterNotNull()
+            logger.info { "Successfully found ${result.size} material(s)" }
+            return result
+        }
+        catch (e: DataAccessException) {
+            logger.error(e) { "Database error while searching material(s)" }
+            throw e
+        }
+        catch (e: UncategorizedSQLException) {
+            logger.error(e) { "SQL error during find material(s)" }
+            throw e
+        }
+    }
+
+    override fun findProjectCodes(): List<String> {
+        val (sql, params) = sqlProvider.buildFindProjectCodesQuery()
+        logger.debug { "Executing SQL: $sql" }
+        logger.debug { "With parameters: $params" }
+
+        try {
+            val result = namedParameterJdbcTemplate.queryForList(sql, params, String::class.java).filterNotNull()
+            logger.info { "Successfully found ${result.size} project code(s)" }
+            return result
+        }
+        catch (e: DataAccessException) {
+            logger.error(e) { "Database error while searching project code(s)" }
+            throw e
+        }
+        catch (e: UncategorizedSQLException) {
+            logger.error(e) { "SQL error during find project code(s)" }
+            throw e
+        }
+    }
+
+    override fun findWarehouseCodes(): List<String> {
+        val (sql, params) = sqlProvider.buildFindWarehouseCodesQuery()
+        logger.debug { "Executing SQL: $sql" }
+        logger.debug { "With parameters: $params" }
+
+        try {
+            val result = namedParameterJdbcTemplate.queryForList(sql, params, String::class.java).filterNotNull()
+            logger.info { "Successfully found ${result.size} warehouse code(s)" }
+            return result
+        }
+        catch (e: DataAccessException) {
+            logger.error(e) { "Database error while searching warehouse code(s)" }
+            throw e
+        }
+        catch (e: UncategorizedSQLException) {
+            logger.error(e) { "SQL error during find warehouse code(s)" }
             throw e
         }
     }

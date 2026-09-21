@@ -1,13 +1,13 @@
 package ru.bz.bzinforintegrationservice.applications.usecases.measuredremainder
 
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPage
 import ru.bz.bzinforintegrationservice.domain.common.pagination.DomainPageRequest
 import ru.bz.bzinforintegrationservice.domain.model.entity.measuredremainder.MeasuredRemainder
 import ru.bz.bzinforintegrationservice.domain.model.measuredremainder.filter.MeasuredRemainderFilter
 import ru.bz.bzinforintegrationservice.domain.repository.MeasuredRemainderRepository
 
-@Component
+@Service
 class SearchMeasuredRemaindersUseCase(
     private val repository: MeasuredRemainderRepository
 ) {
